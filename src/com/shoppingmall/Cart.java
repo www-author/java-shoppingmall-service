@@ -9,18 +9,23 @@ public class Cart {
         this.products = products;
     }
 
-    public Product[] getProducts() {
-        return products;
-    }
-
     public BigDecimal calculateDeliveryCharge() {
-        BigDecimal totalDeliveryCharge = BigDecimal.ZERO;
+        double totalWeight = 0.0;
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        BigDecimal discount = BigDecimal.ZERO;
+
         for (Product product : products) {
-            BigDecimal weightUnitDeliveryCharge = getWeightUnitDeliveryCharge(product.getWeight());
-            BigDecimal discountedDeliveryFee = getDiscountBillingByPrice(weightUnitDeliveryCharge, product.getPrice());
-            totalDeliveryCharge = totalDeliveryCharge.add(discountedDeliveryFee);
+            totalWeight += product.getWeight();
+            totalPrice = totalPrice.add(product.getPrice());
+            discount = discount.add(product.getDisCountAmount(product));
         }
-        return totalDeliveryCharge;
+
+        BigDecimal weightUnitDeliveryCharge = getWeightUnitDeliveryCharge(totalWeight);
+
+        return getDiscountBillingByPrice(
+                weightUnitDeliveryCharge,
+                (totalPrice.subtract(discount))
+        );
     }
 
     public BigDecimal getWeightUnitDeliveryCharge(double weight) {
