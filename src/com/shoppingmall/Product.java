@@ -28,9 +28,9 @@ public class Product implements Promotion {
     @Override
     public BigDecimal getDisCountAmount(Product product) {
         if (product instanceof Grocery) {
-            return product.price.subtract(BigDecimal.valueOf(2000));
+            return BigDecimal.valueOf(2000);
         } else if (product instanceof Beauty) {
-            return product.price.subtract(BigDecimal.valueOf(10000));
+            return BigDecimal.valueOf(10000);
         }
         return BigDecimal.ZERO;
     }
